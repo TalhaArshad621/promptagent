@@ -188,14 +188,3 @@ git remote set-url origin git@github.com:TalhaArshad621/promptagent.git
 ## License
 
 MIT License
-
-```
-
----
-
-This README covers **everything a collaborator needs to get the project running from scratch**, including Docker setup, database, Redis, Horizon, and Git instructions.
-
-If you want, I can also create a **minimal `.env.example`** file to include in the repo so collaborators don’t have to guess environment variables.
-
-Do you want me to create that too?
-```
