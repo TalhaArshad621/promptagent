@@ -35,8 +35,6 @@ git clone git@github.com:TalhaArshad621/promptagent.git
 cd promptagent
 ```
 
-````
-
 2. Copy the environment file:
 
 ```bash
@@ -201,4 +199,3 @@ If you want, I can also create a **minimal `.env.example`** file to include in t
 
 Do you want me to create that too?
 ```
-````
