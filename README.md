@@ -1,59 +1,207 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Absolutely! Based on everything we’ve gone through with your **Laravel + Docker + Postgres + Redis + Horizon** setup, here’s a solid `README.md` you can use for collaborators:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+You can copy this into your project root.
 
-## About Laravel
+````markdown
+# PromptAgent
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A Laravel 12 application running with Docker for development and production. This project includes PostgreSQL, Redis, and Laravel Horizon for queue management.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Table of Contents
 
-## Learning Laravel
+-   [Requirements](#requirements)
+-   [Getting Started](#getting-started)
+-   [Environment Setup](#environment-setup)
+-   [Docker Commands](#docker-commands)
+-   [Database](#database)
+-   [Queues and Horizon](#queues-and-horizon)
+-   [Running Artisan Commands](#running-artisan-commands)
+-   [Contributing](#contributing)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Requirements
 
-## Laravel Sponsors
+-   Docker & Docker Compose
+-   Git
+-   PHP >= 8.4 (for local CLI)
+-   Composer
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Getting Started
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. Clone the repository:
+
+```bash
+git clone git@github.com:TalhaArshad621/promptagent.git
+cd promptagent
+```
+````
+
+2. Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+3. Set the application key:
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan key:generate
+```
+
+---
+
+## Environment Setup
+
+Update `.env` as needed. Key services:
+
+```dotenv
+APP_NAME=PromptAgent
+APP_ENV=local
+APP_KEY=base64:...
+APP_DEBUG=true
+APP_URL=http://localhost:8080
+
+DB_CONNECTION=pgsql
+DB_HOST=pgsql
+DB_PORT=5432
+DB_DATABASE=promptagent
+DB_USERNAME=postgres
+DB_PASSWORD=secret
+
+REDIS_CLIENT=phpredis
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+> **Note:** `DB_HOST` should point to the PostgreSQL container name (`pgsql`) in Docker Compose.
+> `REDIS_HOST` should point to the Redis container (`redis`).
+
+---
+
+## Docker Commands
+
+### Start Development Environment
+
+```bash
+docker compose -f compose.dev.yaml up --build
+```
+
+### Stop Containers
+
+```bash
+docker compose -f compose.dev.yaml down
+```
+
+### Access Workspace Container
+
+```bash
+docker compose -f compose.dev.yaml exec workspace sh
+```
+
+---
+
+## Database
+
+1. Run migrations:
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan migrate
+```
+
+2. Seed database (if applicable):
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan db:seed
+```
+
+> **Note:** Ensure Postgres container is running.
+
+---
+
+## Queues and Horizon
+
+1. Install Laravel Horizon (already included in composer dependencies):
+
+```bash
+docker compose -f compose.dev.yaml exec workspace composer require laravel/horizon
+```
+
+2. Run Horizon:
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan horizon
+```
+
+3. Access dashboard: `http://localhost:8080/horizon`
+
+> **Note:** Ensure Redis container is running.
+
+---
+
+## Running Artisan Commands
+
+Run any artisan command inside the `workspace` container:
+
+```bash
+docker compose -f compose.dev.yaml exec workspace php artisan <command>
+```
+
+Examples:
+
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+```
+
+---
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature/my-feature`
+3. Commit changes: `git commit -am 'Add new feature'`
+4. Push to branch: `git push origin feature/my-feature`
+5. Open a pull request.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Notes
 
-## Security Vulnerabilities
+-   Ports used in development:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+8080: Laravel Web
+5432: PostgreSQL
+6379: Redis
+```
+
+-   Make sure you have no port conflicts with other Docker projects.
+-   Use SSH remote for Git operations to avoid 403 errors:
+
+```bash
+git remote set-url origin git@github.com:TalhaArshad621/promptagent.git
+```
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT License
+
+```
+
+---
+
+This README covers **everything a collaborator needs to get the project running from scratch**, including Docker setup, database, Redis, Horizon, and Git instructions.
+
+If you want, I can also create a **minimal `.env.example`** file to include in the repo so collaborators don’t have to guess environment variables.
+
+Do you want me to create that too?
+```
