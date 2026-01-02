@@ -1,8 +1,3 @@
-Absolutely! Based on everything we’ve gone through with your **Laravel + Docker + Postgres + Redis + Horizon** setup, here’s a solid `README.md` you can use for collaborators:
-
-You can copy this into your project root.
-
-````markdown
 # PromptAgent
 
 A Laravel 12 application running with Docker for development and production. This project includes PostgreSQL, Redis, and Laravel Horizon for queue management.
@@ -39,6 +34,7 @@ A Laravel 12 application running with Docker for development and production. Thi
 git clone git@github.com:TalhaArshad621/promptagent.git
 cd promptagent
 ```
+
 ````
 
 2. Copy the environment file:
@@ -205,3 +201,4 @@ If you want, I can also create a **minimal `.env.example`** file to include in t
 
 Do you want me to create that too?
 ```
+````
